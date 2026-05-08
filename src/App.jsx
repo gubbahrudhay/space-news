@@ -2,12 +2,14 @@ import React from 'react';
 import { Toaster } from 'react-hot-toast';
 import { useISS } from './hooks/useISS';
 import { useNews } from './hooks/useNews';
+import { useTheme } from './hooks/useTheme';
 import ThemeToggle from './components/ThemeToggle';
 import ISSTracking from './components/Dashboard/ISSTracking';
 import NewsDashboard from './components/Dashboard/NewsDashboard';
 import Chatbot from './components/Chatbot/Chatbot';
 
 function App() {
+  const { theme } = useTheme();
   const { issData, loading: issLoading, autoRefresh, manualRefresh, toggleAutoRefresh } = useISS();
   const newsState = useNews();
 
@@ -49,7 +51,9 @@ function App() {
                   <span className="text-xs font-semibold text-slate-600 dark:text-slate-400 uppercase tracking-wider">System Online</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className="text-sm font-medium text-slate-600 dark:text-slate-400 hidden sm:inline-block">Switch to Dark</span>
+                  <span className="text-sm font-medium text-slate-600 dark:text-slate-400 hidden sm:inline-block">
+                    {theme === 'light' ? 'Switch to Dark' : 'Switch to Light'}
+                  </span>
                   <ThemeToggle />
                 </div>
               </div>

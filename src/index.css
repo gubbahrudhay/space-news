@@ -4,6 +4,8 @@
   --font-family-sans: "Inter", system-ui, sans-serif;
 }
 
+@variant dark (&:where(.dark, .dark *));
+
 @layer base {
   body {
     @apply bg-slate-50 text-slate-900 transition-colors duration-300;

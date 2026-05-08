@@ -54,12 +54,11 @@ export const fetchLocationName = async (lat, lng) => {
 export const fetchNews = async (category = 'technology') => {
   const apiKey = import.meta.env.VITE_GNEWS_API_KEY;
   if (!apiKey || apiKey === 'your_gnews_api_key_here') {
-    // Return mock data if API key is not set
-    return getMockNews(category);
+    // Return empty array if API key is not set
+    return [];
   }
 
   try {
-    console.log(`Fetching news for ${category} using GNews...`);
     const response = await axios.get('https://gnews.io/api/v4/search', {
       params: {
         q: category,
@@ -68,8 +67,6 @@ export const fetchNews = async (category = 'technology') => {
         apikey: apiKey
       }
     });
-    
-    console.log(`GNews response for ${category}:`, response.status);
     
     // Map GNews format to match our app's expected structure
     return (response.data.articles || []).map(article => ({
@@ -80,8 +77,8 @@ export const fetchNews = async (category = 'technology') => {
     }));
   } catch (error) {
     console.error("Error fetching news from GNews:", error.response?.data || error.message);
-    // Fallback to mock data on error
-    return getMockNews(category);
+    // Return empty array on error instead of mock data
+    return [];
   }
 };
 
@@ -133,17 +130,4 @@ export const fetchChatResponse = async (messages, context) => {
     }
     return `API Error: ${apiErrorMsg}`;
   }
-};
-
-// Mock data generator for fallback
-const getMockNews = (category) => {
-  return Array(10).fill(null).map((_, i) => ({
-    uri: `mock-${category}-${i}`,
-    title: `Mock News: Major breakthrough in ${category} reported today`,
-    body: `This is a short description for a mock news article about ${category}. It contains some interesting information that would normally be fetched from the API.`,
-    source: { title: 'Mock News Network' },
-    authors: [{ name: 'Jane Doe' }],
-    dateTime: new Date(Date.now() - Math.random() * 10000000).toISOString(),
-    image: `https://picsum.photos/seed/${category}${i}/400/200`
-  }));
 };
